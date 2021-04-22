@@ -1,34 +1,20 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Rollout
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: guestbook-ui
-  labels:
-    app: guestbook-ui
 spec:
   replicas: 3
   revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: guestbook-ui
-  strategy:
-    blueGreen:
-      activeService: guestbook-ui
-      previewService: guestbook-ui-preview
   template:
     metadata:
       labels:
         app: guestbook-ui
     spec:
       containers:
-        - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
-          name: guestbook-ui
-          ports:
-          - containerPort: 80
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+      - image: gcr.io/heptio-images/ks-guestbook-demo:0.2
+        name: guestbook-ui
+        ports:
+        - containerPort: 80
